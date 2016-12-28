@@ -148,5 +148,11 @@ PyObject *PyInit_mach(void) {
     MachError = PyErr_NewException("mach.MachError", NULL, NULL);
     PyObject *module = PyModule_Create(&moduledef);
     PyModule_AddObject(module, "MachError", MachError);
+    PyModule_AddObject(module, "VM_PROT_NONE", PyLong_FromLong(VM_PROT_NONE));
+    PyModule_AddObject(module, "VM_PROT_READ", PyLong_FromLong(VM_PROT_READ));
+    PyModule_AddObject(module, "VM_PROT_WRITE", PyLong_FromLong(VM_PROT_WRITE));
+    PyModule_AddObject(module, "VM_PROT_EXECUTE", PyLong_FromLong(VM_PROT_EXECUTE));
+    PyModule_AddObject(module, "VM_PROT_DEFAULT", PyLong_FromLong(VM_PROT_DEFAULT));
+    PyModule_AddObject(module, "VM_PROT_ALL", PyLong_FromLong(VM_PROT_ALL));
     return module;
 }
