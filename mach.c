@@ -19,7 +19,7 @@
 static PyObject *MachError;
 
 static PyObject *PyMach_Error(kern_return_t ret) {
-    return PyErr_Format(MachError, "kernel return code %d", (int)ret);
+    return PyErr_Format(MachError, "Kernel Return Code: %d", (int)ret);
 }
 
 static PyObject *pymach_task_self(PyObject *self, PyObject *args) {
@@ -118,17 +118,17 @@ static PyObject *pymach_vm_asrl_offset(PyObject *self, PyObject *args) {
 
 static PyMethodDef mach_methods[] = {
     {"task_self", pymach_task_self, METH_VARARGS,
-     "Get a Mach port for the current task"},
+     "Get a Mach port for the current task: task_self() -> int"},
     {"task_for_pid", pymach_task_for_pid, METH_VARARGS,
-     "Get a Mach port for the task corresponding to a pid"},
+     "Get a Mach port for the task corresponding to a pid: task_for_pid(pid: int) -> int"},
     {"vm_protect", pymach_vm_protect, METH_VARARGS,
-     "Change memory protection in another task"},
+     "Change memory protection in another task: vm_protect(task: int, address: int, size: int, protection: int)"},
     {"vm_read", pymach_vm_read, METH_VARARGS,
-     "Read memory from another task"},
+     "Read memory from another task: vm_read(task, address, size) -> bytes"},
     {"vm_write", pymach_vm_write, METH_VARARGS,
-     "Write memory to another task"},
+     "Write memory to another task: vm_write(task: int, address: int, data: bytes)"},
     {"vm_asrl_offset", pymach_vm_asrl_offset, METH_VARARGS,
-     "Get ASRL offset of another task"},
+     "Get ASRL offset of another task: vm_asrl_offset(pid: int)"},
     {NULL, NULL, 0, NULL}
 };
 
@@ -137,9 +137,16 @@ static struct PyModuleDef moduledef = {
     "mach",
     "Wrap some low-level Mach stuff for Python 3",
     -1,
-    mach_methods
+    mach_methods,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
-PyMODINIT_FUNC *PyInit_mach(void) {
-    return PyModule_Create(&moduledef);
+PyObject *PyInit_mach(void) {
+    MachError = PyErr_NewException("mach.MachError", NULL, NULL);
+    PyObject *module = PyModule_Create(&moduledef);
+    PyModule_AddObject(module, "MachError", MachError);
+    return module;
 }
