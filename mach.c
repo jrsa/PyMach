@@ -19,7 +19,7 @@
 static PyObject *MachError;
 
 static PyObject *PyMach_Error(kern_return_t ret) {
-    return PyErr_Format(MachError, "Kernel Return Code: %d", (int)ret);
+    return PyErr_Format(MachError, "%s", mach_error_string(ret));
 }
 
 static PyObject *pymach_task_self(PyObject *self, PyObject *args) {
