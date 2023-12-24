@@ -7,7 +7,7 @@
  *  https://github.com/abarnert/pymach
  *
  */
-
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <sys/types.h>
 #include <mach/mach_init.h>
